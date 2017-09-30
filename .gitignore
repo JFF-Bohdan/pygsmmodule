@@ -99,3 +99,11 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# private
+dev/
+test.py
+.idea/
+bp/
+.coveralls.yml
+.pypirc
