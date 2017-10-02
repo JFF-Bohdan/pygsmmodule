@@ -1,0 +1,4 @@
+---
+uart:
+  name: com22
+  speed: 57600

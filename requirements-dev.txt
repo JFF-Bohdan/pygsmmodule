@@ -9,3 +9,5 @@ pytest-catchlog==1.2.2
 pytest-cov==2.4.0
 yapf==0.16.1
 PyYAML==3.12
+attrdict==2.0.0
+runscript==0.2.6
