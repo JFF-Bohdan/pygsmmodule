@@ -17,10 +17,12 @@ deploy:
   provider: pypi
   user: kittyhawk
   distributions: sdist
-  server: https://pypi.python.org/pypi
   password:
     secure: jmDXoyxCacF2FXSbxoMeigCkf8lXb6CAqQ1jQjwr5mv9RPMV0LvShJTgCPOQlt6V3pISV2yxo78btBaawc23q8iYrOA8YNHROerw0xIUmd4+xNpYQuImNebzr2fFV/DrkkcWe5Kyq03ujehuJmWINCYlNjXF4A7r/MG0pv2r0/hQT+Ug0h/x+OEvF/BxJABCAT3Rbl6T8THRfDVwg3wcpVia0c/VhWp4ZDssBMtTtxidZB1ZR+9B0Vf6sQwrdpZu5w5fT9u7nJ29iAR0qebgOre8wvQJy2iZN7p2QA+Skl5DOQEqsbcvhBiD8fvwygZzn6Odn32nckOrQAiBuRCGm+5rGlbwHxbwox4GVTRXoonPNILQnzTaDh6fAvvQvFat/O9/qcLWuvuKeM5wMuMigPEboqZYeI4uSZMcpVxAcT68233uhKCrQApUwmh2fN1AHSQ2cvpB6gNKdcBky6q4Kjrj6+pkrWofk8IS150SVw50xB6tWXO5+oIRFaJMIkfRY+YHSnS9/SAt1bZaSdcJqIT+R1Fztg+bFElGMRPoumNqIRwdiN/l9k7JfMlp6JXZ8qJ27l6v2s2vesqUT7nWilwh4f+1a0g2Mt/AUwri8yo7vZiVTkVEr8O0E8NzbT0jCKI3bLysOQVsFayfjSQ7u1yYsLQDKy/ztxoLuFwNbFA=
   on:
     tags: false
     branch: master
     condition: $TRAVIS_PYTHON_VERSION = "3.6"
+
+	
+	$(PYTHON) setup.py sdist upload
