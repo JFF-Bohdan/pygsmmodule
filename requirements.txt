@@ -1,2 +1,2 @@
-crcmod==1.7
-pyserial==3.1
+crcmod>=1.7
+pyserial>=3.1
