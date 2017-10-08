@@ -23,6 +23,3 @@ deploy:
     tags: false
     branch: master
     condition: $TRAVIS_PYTHON_VERSION = "3.6"
-
-	
-	$(PYTHON) setup.py sdist upload
