@@ -1,15 +1,51 @@
-from distutils.core import setup
+import os
+import re
+
+from pip.req import parse_requirements
+
+from pygsmmodule import __version__
+
+from setuptools import find_packages, setup
+
+
+install_reqs = parse_requirements("requirements.txt", session=False)
+requirements = [str(ir.req) for ir in install_reqs]
+package_name = "pygsmmodule"
+hyphen_package_name = package_name.replace("_", "-")
+
+
+def read_version():
+    regexp = re.compile(r"^__version__\s*=\s*'([\d.abrc]+)'")
+    init_py = os.path.join(os.path.dirname(__file__), package_name, "__init__.py")
+    with open(init_py) as f:
+        for line in f:
+            match = regexp.match(line)
+            if match is not None:
+                return match.group(1)
+        else:
+            raise RuntimeError("Cannot find version in {}".format(init_py))
+
 
 if __name__ == "__main__":
+    packages_to_remove = ["script", "tests"]
+    packages = find_packages()
+
+    for item in packages_to_remove:
+        if item in packages:
+            packages.remove(item)
+
     setup(
         name="pygsmmodule",
-        packages=["pygsmmodule"],  # this must be the same as the name above
-        version="0.1",
-        description="GSM modules support library",
+        # packages=["pygsmmodule"],  # this must be the same as the name above
+        packages=packages,
+        version=__version__,
+        description="GSM modem control libraty",
         author="Bohdan Danishevsky",
         author_email="dbn@aminis.com.ua",
-        url="https://github.com/JFF-Bohdan/pygsmmodule",  # use the URL to the github repo
-        download_url="",  # I"ll explain this in a second
+        url="https://github.com/JFF-Bohdan/{}".format(package_name),  # use the URL to the github repo
         keywords=["GSM", "sim module", "SIM-800", "SIM 800", " SIM-900", "SIM 900"],  # arbitrary keywords
+        install_requires=requirements,
         classifiers=[],
+        license="MIT",
+        zip_safe=False
     )

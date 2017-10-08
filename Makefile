@@ -9,6 +9,7 @@ PYFLAKE8 = $(PYTHON) -m flake8
 TESTDIR = tests
 MODULE_NAME = pygsmmodule
 TMP_PATH = .\tmp
+BUILD_PATH = build
 
 environ: clean requirements.txt requirements-dev.txt
 	virtualenv $(ENV)
@@ -17,12 +18,13 @@ environ: clean requirements.txt requirements-dev.txt
 
 .PHONY: help
 help:
-	@echo "make                      # create virtual env and setup dependencies"
-	@echo "make tests                # run tests"
-	@echo "make coverage             # run tests with coverage report"
-	@echo "make lint                 # check linting"
-	@echo "make flake8               # alias for `make lint`"
-	@echo "make clean                # remove more or less everything created by make"
+	@echo "make             # create virtual env and setup dependencies"
+	@echo "make tests       # run tests"
+	@echo "make coverage    # run tests with coverage report"
+	@echo "make lint        # check linting"
+	@echo "make flake8      # alias for `make lint`"
+	@echo "make clean       # remove more or less everything created by make"
+	@echo "make deploy      # make deploy to pypi"
 
 .PHONY: tests
 tests:
@@ -48,4 +50,11 @@ clean:
 	if exist htmlcov rd htmlcov /q /s
 	if exist log rd log /q /s
 	if exist $(TMP_PATH) rd $(TMP_PATH) /q /s
+	if exist $(BUILD_PATH) rd $(BUILD_PATH) /q /s
+	if exist .cache rd .cache /q /s
+	if exist $(MODULE_NAME).egg-info rd $(MODULE_NAME).egg-info /q /s
 	del /S *.pyc
+
+.PHONY: deploy
+deploy:
+	$(PYTHON) setup.py sdist upload
