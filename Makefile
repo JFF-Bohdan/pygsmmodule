@@ -18,21 +18,24 @@ environ: clean requirements.txt requirements-dev.txt
 
 .PHONY: help
 help:
-	@echo "make             # create virtual env and setup dependencies"
-	@echo "make tests       # run tests"
-	@echo "make coverage    # run tests with coverage report"
-	@echo "make lint        # check linting"
-	@echo "make flake8      # alias for `make lint`"
-	@echo "make clean       # remove more or less everything created by make"
-	@echo "make deploy      # make deploy to pypi"
+	@echo "make                # create virtual env and setup dependencies"
+	@echo "make tests          # run tests"
+	@echo "make coverage       # run tests with coverage report"
+	@echo "make lint           # check linting"
+	@echo "make flake8         # alias for `make lint`"
+	@echo "make clean          # remove more or less everything created by make"
+	@echo "make deploy         # make deploy to pypi"
+	@echo "make local_install  # make local install"
 
 .PHONY: tests
 tests:
 	$(PYTEST) $(TESTDIR) -vv
+	$(PYTHON) setup.py check
 
 .PHONY: coverage
 coverage:
 	$(PYTEST) $(TESTDIR) -vv --cov=$(MODULE_NAME)
+	$(PYTHON) setup.py check
 	$(COVERAGE) html
 
 .PHONY: lint
@@ -46,6 +49,7 @@ flake8:
 .PHONY: clean
 clean:
 	if exist $(ENV) rd $(ENV) /q /s
+	if exist dist rd dist /q /s
 	if exist .coverage del .coverage
 	if exist htmlcov rd htmlcov /q /s
 	if exist log rd log /q /s
@@ -58,3 +62,7 @@ clean:
 .PHONY: deploy
 deploy:
 	$(PYTHON) setup.py sdist upload
+
+.PHONY: local_install
+local_install:
+	$(PYTHON) setup.py install

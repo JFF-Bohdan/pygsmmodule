@@ -8,10 +8,16 @@ from pygsmmodule import __version__
 from setuptools import find_packages, setup
 
 
+README_FILE = "README.md"
 install_reqs = parse_requirements("requirements.txt", session=False)
 requirements = [str(ir.req) for ir in install_reqs]
 package_name = "pygsmmodule"
 hyphen_package_name = package_name.replace("_", "-")
+
+
+def read_file_content(file_name):
+    with open(file_name) as f:
+        return f.read()
 
 
 def read_version():
@@ -36,10 +42,10 @@ if __name__ == "__main__":
 
     setup(
         name="pygsmmodule",
-        # packages=["pygsmmodule"],  # this must be the same as the name above
         packages=packages,
         version=__version__,
-        description="GSM modem control libraty",
+        description="GSM modem control libraty for SIM800/SIM900 modules",
+        long_description=read_file_content(README_FILE),
         author="Bohdan Danishevsky",
         author_email="dbn@aminis.com.ua",
         url="https://github.com/JFF-Bohdan/{}".format(package_name),  # use the URL to the github repo
