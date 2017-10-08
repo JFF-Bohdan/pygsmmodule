@@ -32,7 +32,7 @@ Warning! You also need install dependancies listed in `requirements.txt`
 
 ## Usage
 
-You can find usage examples in `examples` folder. This folder also contains [README.md](./README.md) file with detailed description of each example.
+You can find usage examples in `examples` folder. This folder also contains [README.md](./examples/README.md) file with detailed description of each example.
 
 ## Testing
 
