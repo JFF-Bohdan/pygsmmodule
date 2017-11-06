@@ -17,5 +17,5 @@ def init_serial(uart_name, uart_speed):
 
 
 def load_dev_config():
-    with open("dev_settings.yaml") as fileobj:
-        return AttrDict(yaml.safe_load(fileobj))
+    with open("./dev/dev_settings.yaml") as config_file:
+        return AttrDict(yaml.safe_load(config_file))
