@@ -1,3 +1,4 @@
+from pygsmmodule.at_protocol_support.at_protocol_support import AtProtocolSupport
 from pygsmmodule.supplementary.get_imei import GetImei
 
 from .shared import init_serial, load_dev_config
@@ -6,8 +7,10 @@ from .shared import init_serial, load_dev_config
 def main(**kwargs):
     settings = load_dev_config()
     serial = init_serial(settings.uart.name, settings.uart.speed)
+    at_executor = AtProtocolSupport(serial)
 
-    imei = GetImei.get_imei(serial)
+    imei = GetImei.exec_command(at_executor)
+
     print("imei = '{}'".format(imei))
 
     serial.close()

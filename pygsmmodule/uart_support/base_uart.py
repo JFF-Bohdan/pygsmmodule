@@ -32,7 +32,7 @@ class BaseUart(object):
 
         return self._send_raw_bytes(data, timeout)
 
-    def send_simple_request(self, command, timeout=1000, possible_results = None):
+    def send_simple_request(self, command, timeout=1000, possible_results=None, remove_result=True):
         if type(command) == str:
             command = str(command).encode("ascii")
 
@@ -43,9 +43,39 @@ class BaseUart(object):
         spent_time = self.writeln(command, timeout)
         timeout -= spent_time
 
-        return self._read_simple_result(timeout, possible_results)
+        return self._read_simple_result(timeout, possible_results, remove_result)
 
-    def _read_simple_result(self, timeout, possible_results):
+    def read_zero_terminated_string(self, read_timeout=20000, codepage="ascii"):
+        return self.read_pattern_terminated_string(read_timeout, codepage, bytearray([0x00]))
+
+    def read_pattern_terminated_string(self, read_timeout=20000, codepage="ascii", pattern=None):
+        tm_begin = time.time()
+
+        if pattern is None:
+            pattern = bytearray([0x00, 0xff, 0x0d, 0x0a])
+
+        buffer = bytearray()
+        while True:
+            if SimSupportFunctions.time_delta(tm_begin) >= read_timeout:
+                raise PyGsmModuleTimeoutError
+
+            while True:
+                b = self._serial.read(100)
+                if (b is None) or (len(b) == 0):
+                    break
+
+                idx = b.find(pattern)
+                if idx == -1:
+                    buffer += b
+                else:
+                    buffer += b[:idx]
+                    return buffer.decode(codepage)
+
+            time.sleep(0.05)
+
+        return None
+
+    def _read_simple_result(self, timeout, possible_results, remove_result=True):
         tm_begin = time.time()
 
         read_bytes_qty = 0
@@ -78,6 +108,9 @@ class BaseUart(object):
             last_string = SimSupportFunctions.get_last_non_empty_string(strings[:])
 
             if last_string in possible_results:
-                return SimSupportFunctions.convert_to_string(SimSupportFunctions.remove_end_result(strings))
+                if remove_result:
+                    return SimSupportFunctions.convert_to_string(SimSupportFunctions.remove_end_result(strings))
+                else:
+                    return SimSupportFunctions.convert_to_string(strings)
 
         return None
